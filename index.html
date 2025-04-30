@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Search Operators</title>
+    <style>
+        :root {
+            --primary: #4285F4;
+            --red: #EA4335;
+            --yellow: #FBBC05;
+            --green: #34A853;
+            --light-gray: #f1f1f1;
+            --dark-gray: #5f6368;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: white;
+        }
+        
+        header {
+            padding: 1.5rem;
+            text-align: center;
+            background-color: white;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        header h1 {
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+        
+        header p {
+            color: var(--dark-gray);
+            font-size: 1rem;
+        }
+        
+        main {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .search-container {
+            margin: 2rem auto;
+            max-width: 700px;
+            text-align: center;
+        }
+        
+        .search-box {
+            display: flex;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
+            border-radius: 24px;
+            overflow: hidden;
+        }
+        
+        #search-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            border: none;
+            outline: none;
+        }
+        
+        #search-button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.2s;
+        }
+        
+        #search-button:hover {
+            background-color: #3367d6;
+        }
+        
+        .operators-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+        
+        .operator-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+            transition: box-shadow 0.3s ease;
+        }
+        
+        .operator-card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .operator-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .operator-checkbox {
+            margin-right: 0.75rem;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .operator-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--dark-gray);
+        }
+        
+        .operator-example {
+            color: var(--primary);
+            font-style: italic;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .operator-description {
+            color: var(--dark-gray);
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            font-size: 0.9rem;
+        }
+        
+        .google-colors {
+            display: flex;
+            justify-content: center;
+            gap: 0.25rem;
+            margin-top: 0.5rem;
+        }
+        
+        .color-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        
+        .blue { background-color: var(--primary); }
+        .red { background-color: var(--red); }
+        .yellow { background-color: var(--yellow); }
+        .green { background-color: var(--green); }
+        
+        /* Make the site responsive */
+        @media (max-width: 768px) {
+            .operators-container {
+                grid-template-columns: 1fr;
+            }
+            
+            header h1 {
+                font-size: 1.5rem;
+            }
+            
+            main {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Google Search Operators</h1>
+        <p>Enhance your search with these powerful operators</p>
+    </header>
+    
+    <main>
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="Enter your search...">
+                <button id="search-button">Search</button>
+            </div>
+            <p>Select operators below to add them to your search</p>
+        </div>
+        
+        <div class="operators-container" id="operators-container">
+            <!-- Operators will be added dynamically -->
+        </div>
+    </main>
+    
+    <footer>
+        <p>Google Search Operators Tool</p>
+        <div class="google-colors">
+            <div class="color-dot blue"></div>
+            <div class="color-dot red"></div>
+            <div class="color-dot yellow"></div>
+            <div class="color-dot green"></div>
+        </div>
+    </footer>
+    
+    <script>
+        // Operator data
+        const operators = [
+            {
+                operator: '" "',
+                description: "Search for results that mention a word or phrase.",
+                example: '"steve jobs"',
+                format: '"{value}"'
+            },
+            {
+                operator: 'OR',
+                description: "Search for results related to X or Y.",
+                example: 'jobs OR gates',
+                format: '{value} OR ' 
+            },
+            {
+                operator: '|',
+                description: "Same as OR: Search for results related to X or Y.",
+                example: 'jobs | gates',
+                format: '{value} | '
+            },
+            {
+                operator: 'AND',
+                description: "Search for results related to X and Y.",
+                example: 'jobs AND gates',
+                format: '{value} AND '
+            },
+            {
+                operator: '-',
+                description: "Search for results that don't mention a word or phrase.",
+                example: 'jobs -apple',
+                format: '{value} -'
+            },
+            {
+                operator: '*',
+                description: "Wildcard matching any word or phrase.",
+                example: 'steve * apple',
+                format: '{value} * '
+            },
+            {
+                operator: '( )',
+                description: "Group multiple searches.",
+                example: '(ipad OR iphone) apple',
+                format: '({value}) '
+            },
+            {
+                operator: 'define:',
+                description: "Search for the definition of a word or phrase.",
+                example: 'define:entrepreneur',
+                format: 'define:{value}'
+            },
+            {
+                operator: 'cache:',
+                description: "Find the most recent cache of a webpage.",
+                example: 'cache:apple.com',
+                format: 'cache:{value}'
+            },
+            {
+                operator: 'filetype:',
+                description: "Search for particular types of files (e.g., PDF).",
+                example: 'apple filetype:pdf',
+                format: '{value} filetype:'
+            },
+            {
+                operator: 'ext:',
+                description: "Same as filetype: Search for particular types of files.",
+                example: 'apple ext:pdf',
+                format: '{value} ext:'
+            },
+            {
+                operator: 'site:',
+                description: "Search for results from a particular website.",
+                example: 'site:apple.com',
+                format: 'site:{value}'
+            },
+            {
+                operator: 'related:',
+                description: "Search for sites related to a given domain.",
+                example: 'related:apple.com',
+                format: 'related:{value}'
+            },
+            {
+                operator: 'intitle:',
+                description: "Search for pages with a particular word in the title tag.",
+                example: 'intitle:apple',
+                format: 'intitle:{value}'
+            },
+            {
+                operator: 'allintitle:',
+                description: "Search for pages with multiple words in the title tag.",
+                example: 'allintitle:apple iphone',
+                format: 'allintitle:{value}'
+            },
+            {
+                operator: 'inurl:',
+                description: "Search for pages with a particular word in the URL.",
+                example: 'inurl:apple',
+                format: 'inurl:{value}'
+            },
+            {
+                operator: 'allinurl:',
+                description: "Search for pages with multiple words in the URL.",
+                example: 'allinurl:apple iphone',
+                format: 'allinurl:{value}'
+            },
+            {
+                operator: 'intext:',
+                description: "Search for pages with a particular word in their content.",
+                example: 'intext:apple iphone',
+                format: 'intext:{value}'
+            },
+            {
+                operator: 'allintext:',
+                description: "Search for pages with multiple words in their content.",
+                example: 'allintext:apple iphone',
+                format: 'allintext:{value}'
+            },
+            {
+                operator: 'weather:',
+                description: "Search for the weather in a location.",
+                example: 'weather:san francisco',
+                format: 'weather:{value}'
+            },
+            {
+                operator: 'stocks:',
+                description: "Search for stock information for a ticker.",
+                example: 'stocks:aapl',
+                format: 'stocks:{value}'
+            },
+            {
+                operator: 'map:',
+                description: "Force Google to show map results.",
+                example: 'map:silicon valley',
+                format: 'map:{value}'
+            },
+            {
+                operator: 'movie:',
+                description: "Search for information about a movie.",
+                example: 'movie:steve jobs',
+                format: 'movie:{value}'
+            },
+            {
+                operator: 'in',
+                description: "Convert one unit to another.",
+                example: '$329 in GBP',
+                format: '{value} in '
+            },
+            {
+                operator: 'source:',
+                description: "Search for results from a particular source in Google News.",
+                example: 'apple source:the_verge',
+                format: '{value} source:'
+            },
+            {
+                operator: 'before:',
+                description: "Search for results from before a particular date.",
+                example: 'apple before:2007-06-29',
+                format: '{value} before:'
+            },
+            {
+                operator: 'after:',
+                description: "Search for results from after a particular date.",
+                example: 'apple after:2007-06-29',
+                format: '{value} after:'
+            }
+        ];
+
+        // Generate operator cards
+        const operatorsContainer = document.getElementById('operators-container');
+        
+        operators.forEach(op => {
+            const card = document.createElement('div');
+            card.className = 'operator-card';
+            
+            card.innerHTML = `
+                <div class="operator-header">
+                    <input type="checkbox" class="operator-checkbox" data-operator="${op.operator}" data-format="${op.format}">
+                    <span class="operator-title">${op.operator}</span>
+                </div>
+                <p class="operator-description">${op.description}</p>
+                <p class="operator-example">Example: ${op.example}</p>
+            `;
+            
+            operatorsContainer.appendChild(card);
+        });
+        
+        // Handle checkboxes
+        const searchInput = document.getElementById('search-input');
+        const checkboxes = document.querySelectorAll('.operator-checkbox');
+        
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                if (checkbox.checked) {
+                    const format = checkbox.getAttribute('data-format');
+                    const currentValue = searchInput.value.trim();
+                    
+                    // Add operator based on its format
+                    if (format.includes('{value}')) {
+                        // If operator needs the current value
+                        searchInput.value = format.replace('{value}', currentValue);
+                    } else {
+                        // For simple additions
+                        searchInput.value = currentValue + ' ' + checkbox.getAttribute('data-operator') + ' ';
+                    }
+                    
+                    // Focus on input for better UX
+                    searchInput.focus();
+                }
+            });
+        });
+        
+        // Handle search button
+        document.getElementById('search-button').addEventListener('click', () => {
+            const query = searchInput.value.trim();
+            if (query) {
+                // Open Google search in new tab
+                window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+                
+                // Uncheck all operator checkboxes
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+            }
+        });
+        
+        // Allow Enter key to search
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('search-button').click();
+            }
+        });
+    </script>
+</body>
+</html>
