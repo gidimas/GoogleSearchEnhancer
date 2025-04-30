@@ -132,12 +132,17 @@
             border-radius: 8px;
             padding: 1.5rem;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-            transition: box-shadow 0.3s ease, background-color 0.3s;
+            transition: box-shadow 0.3s ease, background-color 0.3s, transform 0.15s ease;
+            cursor: pointer;
         }
         
         .operator-card:hover {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
             background-color: var(--dark-hover);
+        }
+        
+        .operator-card:active {
+            transform: scale(0.98);
         }
         
         .operator-header {
@@ -252,190 +257,163 @@
                 operator: '" "',
                 description: "Search for results that mention a word or phrase.",
                 example: '"steve jobs"',
-                format: '"{value}"',
-                defaultValue: ''
+                format: '"{value}"'
             },
             {
                 operator: 'OR',
                 description: "Search for results related to X or Y.",
                 example: 'jobs OR gates',
-                format: '{value} OR ', 
-                defaultValue: 'keyword'
+                format: '{value} OR ' 
             },
             {
                 operator: '|',
                 description: "Same as OR: Search for results related to X or Y.",
                 example: 'jobs | gates',
-                format: '{value} | ',
-                defaultValue: 'keyword'
+                format: '{value} | '
             },
             {
                 operator: 'AND',
                 description: "Search for results related to X and Y.",
                 example: 'jobs AND gates',
-                format: '{value} AND ',
-                defaultValue: 'keyword'
+                format: '{value} AND '
             },
             {
                 operator: '-',
                 description: "Search for results that don't mention a word or phrase.",
                 example: 'jobs -apple',
-                format: '{value} -',
-                defaultValue: 'exclude'
+                format: '{value} -'
             },
             {
                 operator: '*',
                 description: "Wildcard matching any word or phrase.",
                 example: 'steve * apple',
-                format: '{value} * ',
-                defaultValue: 'wildcard'
+                format: '{value} * '
             },
             {
                 operator: '( )',
                 description: "Group multiple searches.",
                 example: '(ipad OR iphone) apple',
-                format: '({value}) ',
-                defaultValue: 'group terms'
+                format: '({value}) '
             },
             {
                 operator: 'define:',
                 description: "Search for the definition of a word or phrase.",
                 example: 'define:entrepreneur',
-                format: 'define:{value}',
-                defaultValue: 'word'
+                format: 'define:'
             },
             {
                 operator: 'cache:',
                 description: "Find the most recent cache of a webpage.",
                 example: 'cache:apple.com',
-                format: 'cache:{value}',
-                defaultValue: 'website.com'
+                format: 'cache:'
             },
             {
                 operator: 'filetype:',
                 description: "Search for particular types of files (e.g., PDF).",
                 example: 'apple filetype:pdf',
-                format: '{value} filetype:',
-                defaultValue: 'pdf'
+                format: '{value} filetype:'
             },
             {
                 operator: 'ext:',
                 description: "Same as filetype: Search for particular types of files.",
                 example: 'apple ext:pdf',
-                format: '{value} ext:',
-                defaultValue: 'pdf'
+                format: '{value} ext:'
             },
             {
                 operator: 'site:',
                 description: "Search for results from a particular website.",
                 example: 'site:apple.com',
-                format: 'site:{value}',
-                defaultValue: 'website.com'
+                format: 'site:'
             },
             {
                 operator: 'related:',
                 description: "Search for sites related to a given domain.",
                 example: 'related:apple.com',
-                format: 'related:{value}',
-                defaultValue: 'website.com'
+                format: 'related:'
             },
             {
                 operator: 'intitle:',
                 description: "Search for pages with a particular word in the title tag.",
                 example: 'intitle:apple',
-                format: 'intitle:{value}',
-                defaultValue: 'keyword'
+                format: 'intitle:'
             },
             {
                 operator: 'allintitle:',
                 description: "Search for pages with multiple words in the title tag.",
                 example: 'allintitle:apple iphone',
-                format: 'allintitle:{value}',
-                defaultValue: 'keywords'
+                format: 'allintitle:'
             },
             {
                 operator: 'inurl:',
                 description: "Search for pages with a particular word in the URL.",
                 example: 'inurl:apple',
-                format: 'inurl:{value}',
-                defaultValue: 'keyword'
+                format: 'inurl:'
             },
             {
                 operator: 'allinurl:',
                 description: "Search for pages with multiple words in the URL.",
                 example: 'allinurl:apple iphone',
-                format: 'allinurl:{value}',
-                defaultValue: 'keywords'
+                format: 'allinurl:'
             },
             {
                 operator: 'intext:',
                 description: "Search for pages with a particular word in their content.",
                 example: 'intext:apple iphone',
-                format: 'intext:{value}',
-                defaultValue: 'keyword'
+                format: 'intext:'
             },
             {
                 operator: 'allintext:',
                 description: "Search for pages with multiple words in their content.",
                 example: 'allintext:apple iphone',
-                format: 'allintext:{value}',
-                defaultValue: 'keywords'
+                format: 'allintext:'
             },
             {
                 operator: 'weather:',
                 description: "Search for the weather in a location.",
                 example: 'weather:san francisco',
-                format: 'weather:{value}',
-                defaultValue: 'location'
+                format: 'weather:'
             },
             {
                 operator: 'stocks:',
                 description: "Search for stock information for a ticker.",
                 example: 'stocks:aapl',
-                format: 'stocks:{value}',
-                defaultValue: 'ticker'
+                format: 'stocks:'
             },
             {
                 operator: 'map:',
                 description: "Force Google to show map results.",
                 example: 'map:silicon valley',
-                format: 'map:{value}',
-                defaultValue: 'location'
+                format: 'map:'
             },
             {
                 operator: 'movie:',
                 description: "Search for information about a movie.",
                 example: 'movie:steve jobs',
-                format: 'movie:{value}',
-                defaultValue: 'title'
+                format: 'movie:'
             },
             {
                 operator: 'in',
                 description: "Convert one unit to another.",
                 example: '$329 in GBP',
-                format: '{value} in ',
-                defaultValue: 'unit'
+                format: '{value} in '
             },
             {
                 operator: 'source:',
                 description: "Search for results from a particular source in Google News.",
                 example: 'apple source:the_verge',
-                format: '{value} source:',
-                defaultValue: 'source_name'
+                format: '{value} source:'
             },
             {
                 operator: 'before:',
                 description: "Search for results from before a particular date.",
                 example: 'apple before:2007-06-29',
-                format: '{value} before:',
-                defaultValue: 'YYYY-MM-DD'
+                format: '{value} before:'
             },
             {
                 operator: 'after:',
                 description: "Search for results from after a particular date.",
                 example: 'apple after:2007-06-29',
-                format: '{value} after:',
-                defaultValue: 'YYYY-MM-DD'
+                format: '{value} after:'
             }
         ];
 
@@ -445,48 +423,77 @@
         operators.forEach(op => {
             const card = document.createElement('div');
             card.className = 'operator-card';
+            card.setAttribute('data-operator', op.operator);
+            card.setAttribute('data-format', op.format);
             
             card.innerHTML = `
                 <div class="operator-header">
-                    <input type="checkbox" class="operator-checkbox" data-operator="${op.operator}" data-format="${op.format}">
                     <span class="operator-title">${op.operator}</span>
                 </div>
                 <p class="operator-description">${op.description}</p>
                 <p class="operator-example">Example: ${op.example}</p>
             `;
             
+            // Make card clickable
+            card.style.cursor = 'pointer';
+            
             operatorsContainer.appendChild(card);
         });
         
-        // Handle checkboxes
+        // Handle cards
         const searchInput = document.getElementById('search-input');
-        const checkboxes = document.querySelectorAll('.operator-checkbox');
         const errorMessage = document.getElementById('error-message');
+        const operatorCards = document.querySelectorAll('.operator-card');
         
-        checkboxes.forEach((checkbox, index) => {
-            checkbox.addEventListener('change', () => {
-                if (checkbox.checked) {
-                    const format = checkbox.getAttribute('data-format');
-                    const currentValue = searchInput.value.trim();
-                    const defaultValue = operators[index].defaultValue;
-                    
-                    // Add operator based on its format
-                    if (format.includes('{value}')) {
-                        // If operator needs the current value
-                        if (currentValue) {
-                            searchInput.value = format.replace('{value}', currentValue);
-                        } else {
-                            // Use default value if search box is empty
-                            searchInput.value = format.replace('{value}', defaultValue);
-                        }
+        operatorCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const operator = card.getAttribute('data-operator');
+                const format = card.getAttribute('data-format');
+                const currentValue = searchInput.value;
+                const cursorPosition = searchInput.selectionStart;
+                
+                // Quick highlight effect on click
+                card.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    card.style.transform = 'scale(1)';
+                }, 150);
+                
+                // Handle different operator formats
+                if (operator === '" "') {
+                    // Special handling for quotes
+                    const beforeCursor = currentValue.substring(0, cursorPosition);
+                    const afterCursor = currentValue.substring(cursorPosition);
+                    searchInput.value = beforeCursor + '""' + afterCursor;
+                    // Place cursor between the quotes
+                    setTimeout(() => {
+                        searchInput.selectionStart = cursorPosition + 1;
+                        searchInput.selectionEnd = cursorPosition + 1;
+                    }, 0);
+                } else if (format.includes('{value}')) {
+                    // Operators that transform the current value
+                    if (currentValue) {
+                        searchInput.value = format.replace('{value}', currentValue);
                     } else {
-                        // For simple additions
-                        searchInput.value = (currentValue ? currentValue + ' ' : '') + checkbox.getAttribute('data-operator') + ' ';
+                        // Just add the operator if no value
+                        const baseOperator = format.replace('{value}', '');
+                        searchInput.value = baseOperator;
                     }
+                } else {
+                    // Add the operator at cursor position
+                    const beforeCursor = currentValue.substring(0, cursorPosition);
+                    const afterCursor = currentValue.substring(cursorPosition);
+                    searchInput.value = beforeCursor + operator + ' ' + afterCursor;
                     
-                    // Focus on input for better UX
-                    searchInput.focus();
+                    // Move cursor position after inserted operator
+                    setTimeout(() => {
+                        const newPosition = cursorPosition + operator.length + 1;
+                        searchInput.selectionStart = newPosition;
+                        searchInput.selectionEnd = newPosition;
+                    }, 0);
                 }
+                
+                // Focus on input for better UX
+                searchInput.focus();
             });
         });
         
@@ -499,11 +506,6 @@
                 
                 // Open Google search in new tab
                 window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
-                
-                // Uncheck all operator checkboxes
-                checkboxes.forEach(checkbox => {
-                    checkbox.checked = false;
-                });
             } else {
                 // Show error message
                 errorMessage.classList.add('show');
