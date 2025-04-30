@@ -12,6 +12,15 @@
             --green: #34A853;
             --light-gray: #f1f1f1;
             --dark-gray: #5f6368;
+            
+            /* Dark mode colors */
+            --dark-bg: #202124;
+            --dark-surface: #303134;
+            --dark-text: #e8eaed;
+            --dark-secondary-text: #9aa0a6;
+            --dark-border: #3c4043;
+            --dark-card: #303134;
+            --dark-hover: #3c4043;
         }
         
         * {
@@ -25,14 +34,15 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            background-color: white;
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
         }
         
         header {
             padding: 1.5rem;
             text-align: center;
-            background-color: white;
-            border-bottom: 1px solid var(--light-gray);
+            background-color: var(--dark-surface);
+            border-bottom: 1px solid var(--dark-border);
         }
         
         header h1 {
@@ -42,7 +52,7 @@
         }
         
         header p {
-            color: var(--dark-gray);
+            color: var(--dark-secondary-text);
             font-size: 1rem;
         }
         
@@ -63,9 +73,10 @@
         .search-box {
             display: flex;
             margin-bottom: 1rem;
-            box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
+            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
             border-radius: 24px;
             overflow: hidden;
+            border: 1px solid var(--dark-border);
         }
         
         #search-input {
@@ -74,6 +85,12 @@
             font-size: 1rem;
             border: none;
             outline: none;
+            background-color: var(--dark-surface);
+            color: var(--dark-text);
+        }
+        
+        #search-input::placeholder {
+            color: var(--dark-secondary-text);
         }
         
         #search-button {
@@ -90,6 +107,19 @@
             background-color: #3367d6;
         }
         
+        .error-message {
+            color: var(--red);
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            height: 1.2rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .error-message.show {
+            opacity: 1;
+        }
+        
         .operators-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -98,15 +128,16 @@
         }
         
         .operator-card {
-            background-color: white;
+            background-color: var(--dark-card);
             border-radius: 8px;
             padding: 1.5rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-            transition: box-shadow 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            transition: box-shadow 0.3s ease, background-color 0.3s;
         }
         
         .operator-card:hover {
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            background-color: var(--dark-hover);
         }
         
         .operator-header {
@@ -120,12 +151,13 @@
             width: 18px;
             height: 18px;
             cursor: pointer;
+            accent-color: var(--primary);
         }
         
         .operator-title {
             font-weight: bold;
             font-size: 1.1rem;
-            color: var(--dark-gray);
+            color: var(--dark-text);
         }
         
         .operator-example {
@@ -136,7 +168,7 @@
         }
         
         .operator-description {
-            color: var(--dark-gray);
+            color: var(--dark-secondary-text);
             font-size: 0.95rem;
             line-height: 1.4;
         }
@@ -144,8 +176,8 @@
         footer {
             text-align: center;
             padding: 1.5rem;
-            background-color: var(--light-gray);
-            color: var(--dark-gray);
+            background-color: var(--dark-surface);
+            color: var(--dark-secondary-text);
             font-size: 0.9rem;
         }
         
@@ -220,163 +252,190 @@
                 operator: '" "',
                 description: "Search for results that mention a word or phrase.",
                 example: '"steve jobs"',
-                format: '"{value}"'
+                format: '"{value}"',
+                defaultValue: ''
             },
             {
                 operator: 'OR',
                 description: "Search for results related to X or Y.",
                 example: 'jobs OR gates',
-                format: '{value} OR ' 
+                format: '{value} OR ', 
+                defaultValue: 'keyword'
             },
             {
                 operator: '|',
                 description: "Same as OR: Search for results related to X or Y.",
                 example: 'jobs | gates',
-                format: '{value} | '
+                format: '{value} | ',
+                defaultValue: 'keyword'
             },
             {
                 operator: 'AND',
                 description: "Search for results related to X and Y.",
                 example: 'jobs AND gates',
-                format: '{value} AND '
+                format: '{value} AND ',
+                defaultValue: 'keyword'
             },
             {
                 operator: '-',
                 description: "Search for results that don't mention a word or phrase.",
                 example: 'jobs -apple',
-                format: '{value} -'
+                format: '{value} -',
+                defaultValue: 'exclude'
             },
             {
                 operator: '*',
                 description: "Wildcard matching any word or phrase.",
                 example: 'steve * apple',
-                format: '{value} * '
+                format: '{value} * ',
+                defaultValue: 'wildcard'
             },
             {
                 operator: '( )',
                 description: "Group multiple searches.",
                 example: '(ipad OR iphone) apple',
-                format: '({value}) '
+                format: '({value}) ',
+                defaultValue: 'group terms'
             },
             {
                 operator: 'define:',
                 description: "Search for the definition of a word or phrase.",
                 example: 'define:entrepreneur',
-                format: 'define:{value}'
+                format: 'define:{value}',
+                defaultValue: 'word'
             },
             {
                 operator: 'cache:',
                 description: "Find the most recent cache of a webpage.",
                 example: 'cache:apple.com',
-                format: 'cache:{value}'
+                format: 'cache:{value}',
+                defaultValue: 'website.com'
             },
             {
                 operator: 'filetype:',
                 description: "Search for particular types of files (e.g., PDF).",
                 example: 'apple filetype:pdf',
-                format: '{value} filetype:'
+                format: '{value} filetype:',
+                defaultValue: 'pdf'
             },
             {
                 operator: 'ext:',
                 description: "Same as filetype: Search for particular types of files.",
                 example: 'apple ext:pdf',
-                format: '{value} ext:'
+                format: '{value} ext:',
+                defaultValue: 'pdf'
             },
             {
                 operator: 'site:',
                 description: "Search for results from a particular website.",
                 example: 'site:apple.com',
-                format: 'site:{value}'
+                format: 'site:{value}',
+                defaultValue: 'website.com'
             },
             {
                 operator: 'related:',
                 description: "Search for sites related to a given domain.",
                 example: 'related:apple.com',
-                format: 'related:{value}'
+                format: 'related:{value}',
+                defaultValue: 'website.com'
             },
             {
                 operator: 'intitle:',
                 description: "Search for pages with a particular word in the title tag.",
                 example: 'intitle:apple',
-                format: 'intitle:{value}'
+                format: 'intitle:{value}',
+                defaultValue: 'keyword'
             },
             {
                 operator: 'allintitle:',
                 description: "Search for pages with multiple words in the title tag.",
                 example: 'allintitle:apple iphone',
-                format: 'allintitle:{value}'
+                format: 'allintitle:{value}',
+                defaultValue: 'keywords'
             },
             {
                 operator: 'inurl:',
                 description: "Search for pages with a particular word in the URL.",
                 example: 'inurl:apple',
-                format: 'inurl:{value}'
+                format: 'inurl:{value}',
+                defaultValue: 'keyword'
             },
             {
                 operator: 'allinurl:',
                 description: "Search for pages with multiple words in the URL.",
                 example: 'allinurl:apple iphone',
-                format: 'allinurl:{value}'
+                format: 'allinurl:{value}',
+                defaultValue: 'keywords'
             },
             {
                 operator: 'intext:',
                 description: "Search for pages with a particular word in their content.",
                 example: 'intext:apple iphone',
-                format: 'intext:{value}'
+                format: 'intext:{value}',
+                defaultValue: 'keyword'
             },
             {
                 operator: 'allintext:',
                 description: "Search for pages with multiple words in their content.",
                 example: 'allintext:apple iphone',
-                format: 'allintext:{value}'
+                format: 'allintext:{value}',
+                defaultValue: 'keywords'
             },
             {
                 operator: 'weather:',
                 description: "Search for the weather in a location.",
                 example: 'weather:san francisco',
-                format: 'weather:{value}'
+                format: 'weather:{value}',
+                defaultValue: 'location'
             },
             {
                 operator: 'stocks:',
                 description: "Search for stock information for a ticker.",
                 example: 'stocks:aapl',
-                format: 'stocks:{value}'
+                format: 'stocks:{value}',
+                defaultValue: 'ticker'
             },
             {
                 operator: 'map:',
                 description: "Force Google to show map results.",
                 example: 'map:silicon valley',
-                format: 'map:{value}'
+                format: 'map:{value}',
+                defaultValue: 'location'
             },
             {
                 operator: 'movie:',
                 description: "Search for information about a movie.",
                 example: 'movie:steve jobs',
-                format: 'movie:{value}'
+                format: 'movie:{value}',
+                defaultValue: 'title'
             },
             {
                 operator: 'in',
                 description: "Convert one unit to another.",
                 example: '$329 in GBP',
-                format: '{value} in '
+                format: '{value} in ',
+                defaultValue: 'unit'
             },
             {
                 operator: 'source:',
                 description: "Search for results from a particular source in Google News.",
                 example: 'apple source:the_verge',
-                format: '{value} source:'
+                format: '{value} source:',
+                defaultValue: 'source_name'
             },
             {
                 operator: 'before:',
                 description: "Search for results from before a particular date.",
                 example: 'apple before:2007-06-29',
-                format: '{value} before:'
+                format: '{value} before:',
+                defaultValue: 'YYYY-MM-DD'
             },
             {
                 operator: 'after:',
                 description: "Search for results from after a particular date.",
                 example: 'apple after:2007-06-29',
-                format: '{value} after:'
+                format: '{value} after:',
+                defaultValue: 'YYYY-MM-DD'
             }
         ];
 
@@ -402,20 +461,27 @@
         // Handle checkboxes
         const searchInput = document.getElementById('search-input');
         const checkboxes = document.querySelectorAll('.operator-checkbox');
+        const errorMessage = document.getElementById('error-message');
         
-        checkboxes.forEach(checkbox => {
+        checkboxes.forEach((checkbox, index) => {
             checkbox.addEventListener('change', () => {
                 if (checkbox.checked) {
                     const format = checkbox.getAttribute('data-format');
                     const currentValue = searchInput.value.trim();
+                    const defaultValue = operators[index].defaultValue;
                     
                     // Add operator based on its format
                     if (format.includes('{value}')) {
                         // If operator needs the current value
-                        searchInput.value = format.replace('{value}', currentValue);
+                        if (currentValue) {
+                            searchInput.value = format.replace('{value}', currentValue);
+                        } else {
+                            // Use default value if search box is empty
+                            searchInput.value = format.replace('{value}', defaultValue);
+                        }
                     } else {
                         // For simple additions
-                        searchInput.value = currentValue + ' ' + checkbox.getAttribute('data-operator') + ' ';
+                        searchInput.value = (currentValue ? currentValue + ' ' : '') + checkbox.getAttribute('data-operator') + ' ';
                     }
                     
                     // Focus on input for better UX
@@ -428,6 +494,9 @@
         document.getElementById('search-button').addEventListener('click', () => {
             const query = searchInput.value.trim();
             if (query) {
+                // Hide error message if it was shown
+                errorMessage.classList.remove('show');
+                
                 // Open Google search in new tab
                 window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
                 
@@ -435,6 +504,10 @@
                 checkboxes.forEach(checkbox => {
                     checkbox.checked = false;
                 });
+            } else {
+                // Show error message
+                errorMessage.classList.add('show');
+                searchInput.focus();
             }
         });
         
