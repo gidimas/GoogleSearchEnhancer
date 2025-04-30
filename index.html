@@ -107,17 +107,15 @@
             background-color: #3367d6;
         }
         
-        .error-message {
-            color: var(--red);
+        #search-info {
+            color: var(--dark-secondary-text);
             margin-top: 0.5rem;
-            font-size: 0.9rem;
-            height: 1.2rem;
-            opacity: 0;
-            transition: opacity 0.3s;
+            font-size: 0.95rem;
+            transition: color 0.3s;
         }
         
-        .error-message.show {
-            opacity: 1;
+        #search-info.error {
+            color: var(--red);
         }
         
         .operators-container {
@@ -232,7 +230,7 @@
                 <input type="text" id="search-input" placeholder="Enter your search...">
                 <button id="search-button">Search</button>
             </div>
-            <p>Select operators below to add them to your search</p>
+            <p id="search-info">Select operators below to add them to your search</p>
         </div>
         
         <div class="operators-container" id="operators-container">
@@ -442,8 +440,11 @@
         
         // Handle cards
         const searchInput = document.getElementById('search-input');
-        const errorMessage = document.getElementById('error-message');
+        const searchInfo = document.getElementById('search-info');
         const operatorCards = document.querySelectorAll('.operator-card');
+        
+        // Store the original text of the search info element
+        const originalInfoText = searchInfo.textContent;
         
         operatorCards.forEach(card => {
             card.addEventListener('click', () => {
@@ -501,14 +502,25 @@
         document.getElementById('search-button').addEventListener('click', () => {
             const query = searchInput.value.trim();
             if (query) {
-                // Hide error message if it was shown
-                errorMessage.classList.remove('show');
+                // Reset search info if it was showing an error
+                if (searchInfo.classList.contains('error')) {
+                    searchInfo.classList.remove('error');
+                    searchInfo.textContent = originalInfoText;
+                }
                 
                 // Open Google search in new tab
                 window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
             } else {
                 // Show error message
-                errorMessage.classList.add('show');
+                searchInfo.classList.add('error');
+                searchInfo.textContent = "Please enter a search query";
+                
+                // Reset back to original text after 3 seconds
+                setTimeout(() => {
+                    searchInfo.classList.remove('error');
+                    searchInfo.textContent = originalInfoText;
+                }, 3000);
+                
                 searchInput.focus();
             }
         });
